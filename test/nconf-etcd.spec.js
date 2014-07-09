@@ -68,15 +68,6 @@ describe('nconf/stores/etcd', function() {
         });
       });
 
-      describe('with a nested Object value', function() {
-        it('should respond with the correct value', function(done) {
-          store.get('foo:object:auth', function(err, value) {
-            data.obj.auth.should.deep.equal(value);
-            done();
-          });
-        });
-      });
-
       describe('with null', function() {
         it('should respond with the correct value', function(done) {
           store.get('falsy:object', function(err, value) {
@@ -86,118 +77,67 @@ describe('nconf/stores/etcd', function() {
         });
       });
     });
+
+    describe('the clear() method', function() {
+      it('should actually remove the value from etcd', function(done) {
+        store.clear('foo', function(err) {
+          should.not.exist(err);
+          store.get('foo', function(err, value) {
+            should.not.exist(err);
+            should.not.exist(value);
+            done();
+          });
+        });
+      });
+    });
+
+    describe('the merge() method', function() {
+      describe('when overriding an existing literal value', function() {
+        it('should merge correctly', function(done) {
+          store.set('merge:literal', 'string-value', function (err) {
+            should.not.exist(err);
+
+            store.merge('merge:literal', merge, function (err) {
+              should.not.exist(err);
+
+              store.get('merge:literal', function(err, merged) {
+                should.not.exist(err);
+
+                merge.should.deep.equal(merged);
+                done();
+              });
+            });
+          });
+        });
+      });
+
+      describe('when overriding an existing Array value', function() {
+        it('should merge correctly', function(done) {
+          store.set('merge:array', [1, 2, 3, 4], function (err) {
+            should.not.exist(err);
+
+            store.merge('merge:array', merge, function (err) {
+              should.not.exist(err);
+
+              store.get('merge:array', function(err, merged) {
+                should.not.exist(err);
+
+                merge.should.deep.equal(merged);
+                done();
+              });
+            });
+          });
+        });
+      });
+    });
   });
 });
 
 //vows.describe('nconf/stores/redis').addBatch({
 //}).addBatch({
-//  "When using the nconf redis store": {
-//    topic: new nconf.Redis(),
-//    "the get() method": {
-//      "with an Array value": {
-//        topic: function (store) {
-//          store.get('foo:array', this.callback);
-//        },
-//        "should respond with the correct value": function (err, value) {
-//          assert.deepEqual(value, data.arr);
-//        }
-//      },
-//      "with an Object value": {
-//        topic: function (store) {
-//          store.get('foo:object', this.callback);
-//        },
-//        "should respond with the correct value": function (err, value) {
-//          assert.deepEqual(value, data.obj);
-//        }
-//      },
-//      "with a nested Object value": {
-//        topic: function (store) {
-//          store.get('foo:object:auth', this.callback);
-//        },
-//        "should respond with the correct value": function (err, value) {
-//          assert.deepEqual(value, data.obj.auth);
-//        }
-//      },
-//      "with null": {
-//        topic: function(store) {
-//          store.get('falsy:object', this.callback);
-//        },
-//        "should respond with the correct value": function(err, value) {
-//          assert.equal(value, null);
-//        }
-//      }
-//    }
-//  }
-//}).addBatch({
-//  "When using the nconf redis store": {
-//    topic: new nconf.Redis(),
-//    "the clear() method": {
-//      topic: function (store) {
-//        var that = this;
-//        store.clear('foo', function (err) {
-//          if (err) {
-//            return that.callback(err);
-//          }
-//
-//          store.get('foo', that.callback);
-//        });
-//      },
-//      "should actually remove the value from Redis": function (err, value) {
-//        assert.isNull(err);
-//        assert.isNull(value);
-//      }
-//    }
-//  }
-//}).addBatch({
-//  "When using the nconf redis store": {
-//    topic: new nconf.Redis(),
-//    "the save() method": {
-//      topic: function (store) {
-//        var that = this;
-//        store.save(data, function (err) {
-//          if (err) {
-//            return that.callback(err);
-//          }
-//
-//          store.get('obj', that.callback);
-//        });
-//      },
-//      "should set all values correctly": function (err, value) {
-//        assert.isNull(err);
-//        assert.deepEqual(value, data.obj);
-//      }
-//    }
-//  }
-//}).addBatch({
-//  "When using the nconf redis store": {
-//    topic: new nconf.Redis(),
-//    "the load() method": {
-//      topic: function (store) {
-//        store.load(this.callback);
-//      },
-//      "should respond with the correct object": function (err, value) {
-//        assert.isNull(err);
-//        assert.deepEqual(value, data);
-//      }
-//    }
-//  }
-//}).addBatch({
 //  "when using the nconf redis store": {
 //    topic: new nconf.Redis(),
 //    "the merge() method": {
-//      "when overriding an existing literal value": {
-//        topic: function (store) {
-//          var that = this;
-//          store.set('merge:literal', 'string-value', function () {
-//            store.merge('merge:literal', merge, function () {
-//              store.get('merge:literal', that.callback);
-//            });
-//          });
-//        },
-//        "should merge correctly": function (err, data) {
-//          assert.deepEqual(data, merge);
-//        }
-//      },
 //      "when overriding an existing Array value": {
 //        topic: function (store) {
 //          var that = this;

@@ -7,7 +7,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "mocha test/**/*.spec.js"
+    "test": "mocha test/**/*.spec.js -R spec"
   },
   "repository": {
     "type": "git",
@@ -29,6 +29,7 @@
     "chai": "~1.9.1"
   },
   "dependencies": {
-    "node-etcd": "~2.1.1"
+    "node-etcd": "~2.1.1",
+    "lodash": "~2.4.1"
   }
 }
