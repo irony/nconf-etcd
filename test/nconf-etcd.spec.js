@@ -49,6 +49,42 @@ describe('nconf/stores/etcd', function() {
           });
         });
       });
+
+      describe('with an Array', function() {
+        it('should respond with the correct value', function(done) {
+          store.get('foo:array', function(err, value) {
+            data.arr.should.deep.equal(value);
+            done();
+          });
+        });
+      });
+
+      describe('with an Object', function() {
+        it('should respond with the correct value', function(done) {
+          store.get('foo:object', function(err, value) {
+            data.obj.should.deep.equal(value);
+            done();
+          });
+        });
+      });
+
+      describe('with a nested Object value', function() {
+        it('should respond with the correct value', function(done) {
+          store.get('foo:object:auth', function(err, value) {
+            data.obj.auth.should.deep.equal(value);
+            done();
+          });
+        });
+      });
+
+      describe('with null', function() {
+        it('should respond with the correct value', function(done) {
+          store.get('falsy:object', function(err, value) {
+            should.equal(null, value);
+            done();
+          });
+        });
+      });
     });
   });
 });
@@ -58,14 +94,6 @@ describe('nconf/stores/etcd', function() {
 //  "When using the nconf redis store": {
 //    topic: new nconf.Redis(),
 //    "the get() method": {
-//      "with a literal value": {
-//        topic: function (store) {
-//          store.get('foo:literal', this.callback);
-//        },
-//        "should respond with the correct value": function (err, value) {
-//          assert.equal(value, data.literal);
-//        }
-//      },
 //      "with an Array value": {
 //        topic: function (store) {
 //          store.get('foo:array', this.callback);
