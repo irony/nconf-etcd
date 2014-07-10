@@ -4,6 +4,13 @@ var
   data        = require('nconf/test/fixtures/data').data,
   merge       = require('nconf/test/fixtures/data').merge;
 
+var SERVER = process.env.ETCD_SERVER;
+var PORT = process.env.ETCD_PORT;
+if (!SERVER) {
+  console.log('No server specified. Using default. Specify a server and port by setting the ' +
+    'ETCD_SERVER and ETCD_PORT environment variables');
+}
+
 //
 // Require `nconf-etcd` to extend `nconf`
 //
@@ -11,8 +18,7 @@ var Etcd = require('../lib/nconf-etcd').Etcd;
 
 describe('nconf/stores/etcd', function() {
   describe('When using the nconf etcd store', function() {
-    // TODO - make this configurable
-    var store = new Etcd('192.168.59.103', '5001');
+    var store = new Etcd(SERVER, PORT);
 
     describe('the set() method', function() {
       describe('with a literal', function() {
@@ -129,60 +135,59 @@ describe('nconf/stores/etcd', function() {
           });
         });
       });
+
+      describe('when merging into an existing Object value', function() {
+        it('should merge correctly', function(done) {
+          var current = {
+            prop1: 2,
+            prop2: 'prop2',
+            prop3: {
+              bazz: 'bazz'
+            },
+            prop4: ['foo', 'bar']
+          };
+          store.set('merge:object', current, function (err) {
+            should.not.exist(err);
+
+            store.merge('merge:object', merge, function (err) {
+              should.not.exist(err);
+
+              store.get('merge:object', function(err, merged) {
+                should.not.exist(err);
+
+                merged.prop1.should.equal(1);
+                merged.prop2.should.have.lengthOf(3);
+                merged.prop3.should.deep.equal({
+                  foo: 'bar',
+                  bar: 'foo',
+                  bazz: 'bazz'
+                });
+                merged.prop4.should.have.lengthOf(2);
+                done();
+              });
+            });
+          });
+        });
+      });
+    });
+
+    describe('the reset() method', function() {
+      it('should remove all keys from etcd', function(done) {
+        store.reset(function(err) {
+          should.not.exist(err);
+
+          store.get('obj', function(err, val) {
+            should.not.exist(err);
+
+            should.not.exist(val);
+            done();
+          });
+        })
+      });
     });
   });
 });
 
-//vows.describe('nconf/stores/redis').addBatch({
-//}).addBatch({
-//  "when using the nconf redis store": {
-//    topic: new nconf.Redis(),
-//    "the merge() method": {
-//      "when overriding an existing Array value": {
-//        topic: function (store) {
-//          var that = this;
-//          store.set('merge:array', [1, 2, 3, 4], function () {
-//            store.merge('merge:array', merge, function () {
-//              store.get('merge:array', that.callback);
-//            });
-//          });
-//        },
-//        "should merge correctly": function (err, data) {
-//          assert.deepEqual(data, merge);
-//        }
-//      },
-//      "when merging into an existing Object value": {
-//        topic: function (store) {
-//          var that = this, current;
-//          current = {
-//            prop1: 2,
-//            prop2: 'prop2',
-//            prop3: {
-//              bazz: 'bazz'
-//            },
-//            prop4: ['foo', 'bar']
-//          };
-//
-//          store.set('merge:object', current, function () {
-//            store.merge('merge:object', merge, function () {
-//              store.get('merge:object', that.callback);
-//            });
-//          });
-//        },
-//        "should merge correctly": function (err, data) {
-//          assert.equal(data['prop1'], 1);
-//          assert.equal(data['prop2'].length, 3);
-//          assert.deepEqual(data['prop3'], {
-//            foo: 'bar',
-//            bar: 'foo',
-//            bazz: 'bazz'
-//          });
-//          assert.equal(data['prop4'].length, 2);
-//        }
-//      }
-//    }
-//  }
-//}).addBatch({
 //  "When using the nconf redis store": {
 //    topic: new nconf.Redis(),
 //    "the reset() method": {
