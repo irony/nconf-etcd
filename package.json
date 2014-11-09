@@ -1,6 +1,6 @@
 {
   "name": "nconf-etcd",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "An etcd store for nconf",
   "main": "lib/nconf-etcd.js",
   "directories": {
