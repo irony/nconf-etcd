@@ -17,7 +17,9 @@
     "nconf",
     "etcd"
   ],
-  "author": "Earnest",
+  "author": {
+    "name": "Earnest"
+  },
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/meetearnest/nconf-etcd/issues"
@@ -31,5 +33,11 @@
   "dependencies": {
     "node-etcd": "~2.1.1",
     "lodash": "~2.4.1"
-  }
+  },
+  "readme": "nconf-etcd\n==========\n\nAn etcd store for nconf\n",
+  "readmeFilename": "README.md",
+  "_id": "nconf-etcd@0.0.0",
+  "_shasum": "845075db5b8cf013f2fa9a0bd5912b17265c8ff8",
+  "_resolved": "git://github.com/meetearnest/nconf-etcd#755ec385de2b8316068e3148a24561d4d3a3a1d9",
+  "_from": "nconf-etcd@git://github.com/meetearnest/nconf-etcd"
 }
