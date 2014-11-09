@@ -20,6 +20,10 @@ describe('nconf/stores/etcd', function() {
   describe('When using the nconf etcd store', function() {
     var store = new Etcd(SERVER, PORT);
 
+    before(function (done) {
+      store.reset(done);
+    });
+
     describe('the set() method', function() {
       describe('with a literal', function() {
         it('should respond without an error', function(done) {
@@ -214,6 +218,7 @@ describe('cache', function () {
     value.should.equal('barz2');
     done();
   });
+
 });
 
 //  "When using the nconf redis store": {
