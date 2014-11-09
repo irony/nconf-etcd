@@ -1,6 +1,6 @@
 {
   "name": "nconf-etcd",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "An etcd store for nconf",
   "main": "lib/nconf-etcd.js",
   "directories": {
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/meetearnest/nconf-etcd.git"
+    "url": "git://github.com/irony/nconf-etcd.git"
   },
   "keywords": [
     "nconf",
@@ -22,17 +22,17 @@
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/meetearnest/nconf-etcd/issues"
+    "url": "https://github.com/irony/nconf-etcd/issues"
   },
-  "homepage": "https://github.com/meetearnest/nconf-etcd",
+  "homepage": "https://github.com/irony/nconf-etcd",
   "devDependencies": {
     "mocha": "~1.20.1",
     "nconf": "~0.6.9",
     "chai": "~1.9.1"
   },
   "dependencies": {
-    "node-etcd": "~2.1.1",
-    "lodash": "~2.4.1"
+    "node-etcd": "^2.1.1",
+    "lodash": "^2.4.1"
   },
   "readme": "An etcd store for nconf"
 }
