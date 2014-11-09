@@ -3,6 +3,9 @@ nconf-etcd
 
 An etcd store for nconf
 
+## Installation
+
+    npm install nconf-etcd
 
 ## Usage
 
@@ -28,4 +31,11 @@ currently you have to write like this:
         ...
     })
 
+## Maintainer
 
+Original implementation by [@meetearnest](https://github.com/meetearnest) - forked and released on NPM by [@irony](https://github.com/irony).
+
+
+## License
+
+MIT
