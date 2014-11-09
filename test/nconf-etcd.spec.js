@@ -188,6 +188,34 @@ describe('nconf/stores/etcd', function() {
   });
 });
 
+describe('nconf use()', function () {
+  it('should not throw error when using etcd', function (done) {
+    nconf.use('etcd', {host: SERVER, port: PORT});
+    done();
+  });
+
+});
+
+describe('cache', function () {
+  it('should be able to get the same value directly', function (done) {
+    nconf.use('etcd', {host: SERVER, port: PORT});
+    nconf.set('foo', 'barz');
+    nconf.get('foo', function(err, value){
+      should.not.exist(err);
+      value.should.equal('barz');
+      done()
+    })
+  });
+
+  it('should be able to use the sync get', function (done) {
+    nconf.use('etcd', {host: SERVER, port: PORT});
+    nconf.set('foo', 'barz2');
+    var value = nconf.get('foo');
+    value.should.equal('barz2');
+    done();
+  });
+});
+
 //  "When using the nconf redis store": {
 //    topic: new nconf.Redis(),
 //    "the reset() method": {
