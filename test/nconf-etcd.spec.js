@@ -201,8 +201,11 @@ describe('nconf use()', function () {
 });
 
 describe('cache', function () {
-  it('should be able to get the same value directly', function (done) {
+  before(function () {
     nconf.use('etcd', {host: SERVER, port: PORT});
+  });
+
+  it('should be able to get the same value directly', function (done) {
     nconf.set('foo', 'barz');
     nconf.get('foo', function(err, value){
       should.not.exist(err);
@@ -212,13 +215,44 @@ describe('cache', function () {
   });
 
   it('should be able to use the sync get', function (done) {
-    nconf.use('etcd', {host: SERVER, port: PORT});
     nconf.set('foo', 'barz2');
     var value = nconf.get('foo');
     value.should.equal('barz2');
     done();
   });
 
+  it('should be able to use without cache enabled', function (done) {
+    nconf.use('etcd', {host: SERVER, port: PORT, cache: false });
+    var value = nconf.set('foo', 'bache', function(err){
+      should.not.exist(err);
+      var value = nconf.get('foo', function(err, value){
+        should.not.exist(err);
+        value.should.equal('bache');
+        done();
+      });
+    });
+  });
+
+});
+
+describe('subsets', function () {
+  
+  before(function () {
+    nconf.use('etcd', {host: SERVER, port: PORT});
+  });
+
+  it('should save objects', function (done) {
+    nconf.set('test', {mongo:{host:'124', port:'333'}}, done);
+  });
+
+  it('should overwrite subvalues within set objects', function(){
+    nconf.set('test', { mongo: { host:'124', port:'333' }});
+    nconf.set('test:mongo:host', 'mongo');
+    var host = nconf.get('test:mongo:host');
+    host.should.equal('mongo');
+    var port = nconf.get('test:mongo:port');
+    port.should.equal('333');
+  })
 });
 
 //  "When using the nconf redis store": {
