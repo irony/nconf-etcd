@@ -250,8 +250,9 @@ describe('subsets', function () {
     nconf.set('test:mongo:host', 'mongo');
     var host = nconf.get('test:mongo:host');
     host.should.equal('mongo');
-    var port = nconf.get('test:mongo:port');
-    port.should.equal('333');
+    var port = nconf.get('test:mongo:port', function(err, port) {
+      port.should.equal('333');
+    });
   })
 });
 
