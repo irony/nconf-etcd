@@ -1,5 +1,6 @@
 var
   should      = require('chai').should(),
+  sinon       = require('sinon'),
   nconf       = require('nconf'),
   data        = require('nconf/test/fixtures/data').data,
   merge       = require('nconf/test/fixtures/data').merge;
@@ -233,6 +234,27 @@ describe('cache', function () {
     });
   });
 
+});
+
+describe('logging', function () {
+  before(function () {
+    this.logger = {
+      debug: sinon.stub()
+    };
+    nconf.use('etcd', {host: SERVER, port: PORT, logger: this.logger});
+  });
+
+  it('should log into the debugger if specified', function (done) {
+    var stub = this.logger.debug;
+    nconf.set('foo', 'barz');
+    stub.calledOnce.should.equal(true);
+    nconf.get('foo', function(err, value){
+      should.not.exist(err);
+      stub.calledOnce.should.equal(false);
+      stub.calledTwice.should.equal(true);
+      done()
+    })
+  });
 });
 
 describe('subsets', function () {
