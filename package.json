@@ -1,6 +1,6 @@
 {
   "name": "nconf-etcd",
-  "version": "0.1.1",
+  "version": "0.2.1",
   "description": "An etcd store for nconf",
   "main": "lib/nconf-etcd.js",
   "directories": {
@@ -26,13 +26,14 @@
   },
   "homepage": "https://github.com/irony/nconf-etcd",
   "devDependencies": {
+    "chai": "~1.9.1",
     "mocha": "~1.20.1",
-    "nconf": "~0.6.9",
-    "chai": "~1.9.1"
+    "nconf": "~0.6.9"
   },
   "dependencies": {
+    "lodash": "^2.4.1",
     "node-etcd": "^2.1.1",
-    "lodash": "^2.4.1"
+    "sinon": "^1.12.2"
   },
   "readme": "An etcd store for nconf"
 }
